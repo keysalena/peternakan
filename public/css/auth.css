@@ -1,0 +1,10 @@
+/* Halaman login sederhana. Memakai token warna dari dashboard.css */
+body.auth{align-items:center;justify-content:center;padding:24px}
+.login{width:min(360px,100%);background:var(--card);border:1px solid var(--line);border-radius:12px;padding:32px 28px;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+.login h1{font:700 22px 'Space Grotesk';margin:0 0 24px;text-align:center}
+.login form{display:grid;gap:16px}
+.login .btn{width:100%;padding:11px 20px}
+.login label.check{display:flex;align-items:center;gap:8px;font-weight:400}
+.login input[type=checkbox]{width:auto;accent-color:var(--accent)}
+.login input[aria-invalid=true]{border-color:var(--c)}
+.login .err{min-height:0;font-size:13px}

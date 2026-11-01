@@ -1,0 +1,59 @@
+<?php
+namespace App\Http\Controllers\Auth;
+
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Support\Str;
+use Illuminate\Validation\ValidationException;
+
+class LoginController extends Controller
+{
+    public function show()
+    {
+        return view('auth.login');
+    }
+
+    public function store(Request $request)
+    {
+        $data = $request->validate([
+            'username' => ['required', 'string'],
+            'password' => ['required', 'string'],
+        ]);
+
+        // batasi percobaan: 5 kali per kombinasi username + IP
+        $key = Str::lower($data['username']) . '|' . $request->ip();
+        if (RateLimiter::tooManyAttempts($key, 5)) {
+            $detik = RateLimiter::availableIn($key);
+            throw ValidationException::withMessages(['username' => "Terlalu banyak percobaan. Coba lagi dalam {$detik} detik."]);
+        }
+
+        if (! Auth::attempt($data, $request->boolean('remember'))) {
+            RateLimiter::hit($key, 60);
+            throw ValidationException::withMessages(['username' => 'Username atau password salah.']);
+        }
+
+        // panel ini khusus admin; akun mitra ditolak walau kredensialnya benar
+        if (! Auth::user()->isAdmin()) {
+            Auth::logout();
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+            throw ValidationException::withMessages(['username' => 'Akun ini tidak memiliki akses ke panel admin.']);
+        }
+
+        RateLimiter::clear($key);
+        $request->session()->regenerate();
+
+        return redirect()->intended(route('admin.dashboard'));
+    }
+
+    public function destroy(Request $request)
+    {
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return redirect()->route('login');
+    }
+}

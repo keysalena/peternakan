@@ -13,4 +13,6 @@ class User extends Authenticatable
 
     public function mitra() { return $this->hasOne(Mitra::class, 'id_user'); }
     public function isAdmin(): bool { return $this->role === 'admin'; }
+    public function isMitra(): bool { return $this->role === 'mitra'; }
+    public function homeUrl(): string { return route($this->isAdmin() ? 'admin.dashboard' : 'mitra.dashboard'); }
 }

@@ -1,5 +1,10 @@
 @php
-  $mobile = [
+  $mobile = auth()->user()->isMitra() ? [
+    ['mitra.dashboard',        'dash', 'Dashboard',  'mitra.dashboard'],
+    ['mitra.pengajuan.index',  'clip', 'Pengajuan',  'mitra.pengajuan.*'],
+    ['mitra.transaksi.index',  'card', 'Transaksi',  'mitra.transaksi.*'],
+    ['mitra.pembayaran.index', 'cash', 'Pembayaran', 'mitra.pembayaran.*'],
+  ] : [
     ['admin.dashboard',       'dash', 'Dashboard', 'admin.dashboard'],
     ['admin.mitra.index',     'users','Mitra',     'admin.mitra.*'],
     ['admin.pengajuan.index', 'clip', 'Pengajuan', 'admin.pengajuan.*'],

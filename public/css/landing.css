@@ -1,0 +1,76 @@
+/* Landing page publik TernakKu. Token warna mengikuti dashboard. */
+:root{--forest:#1B4332;--forest-d:#143326;--leaf:#2D6A4F;--mint:#A5D0B9;--sage:#DCEBE2;--cream:#EFE6D8;--clay:#A27B5C;--paper:#F6F8F5;--ink:#191C1A;--mute:#5E6360;--line:#E2E6DF}
+*{box-sizing:border-box;margin:0}
+html{scroll-behavior:smooth;scroll-padding-top:72px}
+body{font:16px/1.6 'Hanken Grotesk',system-ui,sans-serif;color:var(--ink);background:var(--paper)}
+a{color:inherit}
+.wrap{width:min(1100px,100% - 40px);margin-inline:auto}
+h1,h2,h3{font-family:'Space Grotesk',sans-serif;line-height:1.15}
+:focus-visible{outline:2px solid var(--leaf);outline-offset:3px}
+
+/* navigasi */
+.nav{position:sticky;top:0;z-index:5;background:rgba(246,248,245,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.nav .wrap{display:flex;align-items:center;gap:24px;height:64px}
+.brand{display:flex;align-items:center;gap:10px;font:700 20px 'Space Grotesk';text-decoration:none;margin-right:auto}
+.brand i{width:34px;height:34px;border-radius:11px;background:var(--forest);display:grid;place-items:center}
+.nav a.l{text-decoration:none;font-weight:500;color:var(--mute)}
+.nav a.l:hover{color:var(--forest)}
+@media(max-width:720px){.nav a.l{display:none}}
+
+/* tombol */
+.btn{display:inline-block;padding:12px 24px;border-radius:999px;background:var(--forest);color:#fff;font:600 15px 'Hanken Grotesk';text-decoration:none;border:0;cursor:pointer;transition:background .2s,transform .15s}
+.btn:hover{background:var(--leaf)}.btn:active{transform:scale(.98)}
+.btn.ghost{background:transparent;color:var(--forest);box-shadow:inset 0 0 0 1.5px var(--forest)}
+.btn.ghost:hover{background:var(--sage)}
+.btn.cream{background:var(--cream);color:var(--forest)}.btn.cream:hover{background:#fff}
+.btn.sm{padding:9px 20px}
+
+/* hero */
+.hero{padding:64px 0 72px}
+.hero .wrap{display:grid;grid-template-columns:1.1fr 1fr;gap:48px;align-items:center}
+.eyebrow{display:inline-block;padding:4px 12px;border-radius:999px;background:var(--sage);color:var(--forest);font-weight:600;font-size:13px;margin-bottom:16px}
+.hero h1{font-size:clamp(32px,5vw,52px);margin-bottom:16px}
+.hero p.lead{font-size:18px;color:var(--mute);max-width:46ch;margin-bottom:28px}
+.cta{display:flex;flex-wrap:wrap;gap:12px}
+.art{background:var(--sage);border-radius:36px;padding:24px;display:grid;place-items:center}
+.art svg{width:100%;max-width:420px;height:auto}
+@media(max-width:860px){.hero .wrap{grid-template-columns:1fr}.art{order:-1}}
+
+/* info peternakan */
+.info{padding:8px 0 72px}
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.c{background:#fff;border:1px solid var(--line);border-radius:20px;padding:24px}
+.c small{display:block;color:var(--mute);font-weight:500}
+.c b{display:block;font:700 34px 'Space Grotesk';color:var(--forest);margin:4px 0}
+.c span{color:var(--mute);font-size:14px}
+@media(max-width:720px){.cards{grid-template-columns:1fr}}
+
+/* cara kerja */
+.how{padding:72px 0;background:#fff;border-block:1px solid var(--line)}
+.how h2,.reg h2{font-size:clamp(26px,3.5vw,36px);margin-bottom:8px}
+.how .sub{color:var(--mute);margin-bottom:32px}
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;list-style:none;padding:0}
+.steps li{background:var(--paper);border-radius:20px;padding:22px}
+.steps em{display:grid;place-items:center;width:34px;height:34px;border-radius:50%;background:var(--forest);color:var(--cream);font:700 15px 'Space Grotesk';font-style:normal;margin-bottom:12px}
+.steps h3{font-size:18px;margin-bottom:4px}.steps p{color:var(--mute);font-size:14px}
+@media(max-width:900px){.steps{grid-template-columns:1fr 1fr}}
+@media(max-width:520px){.steps{grid-template-columns:1fr}}
+
+/* daftar mitra */
+.reg{padding:80px 0;background:linear-gradient(160deg,var(--forest),var(--forest-d));color:#fff}
+.reg .wrap{display:grid;grid-template-columns:1fr 1.1fr;gap:48px;align-items:start}
+.reg p{color:var(--mint);max-width:42ch}
+.reg ul{margin:20px 0 0;padding-left:20px;color:var(--cream)}
+.form{background:#fff;color:var(--ink);border-radius:28px;padding:32px;display:grid;gap:16px;box-shadow:0 24px 60px rgba(0,0,0,.3)}
+.form label{display:grid;gap:6px;font-weight:500;font-size:14px}
+.form input,.form select{width:100%;padding:12px 16px;border:1px solid #D3D9CE;border-radius:12px;font:400 15px 'Hanken Grotesk';background:#fff;color:var(--ink)}
+.form input[aria-invalid=true]{border-color:#9F1239}
+.f2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.err{color:#9F1239;font-size:13px}
+.form .btn{width:100%;padding:13px}
+.form .alt{text-align:center;font-size:14px;color:var(--mute)}
+.form .alt a{color:var(--forest);font-weight:600}
+@media(max-width:900px){.reg .wrap{grid-template-columns:1fr}}
+@media(max-width:480px){.f2{grid-template-columns:1fr}.form{padding:24px 20px}}
+
+footer{padding:28px 0;color:var(--mute);font-size:14px;text-align:center}

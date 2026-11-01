@@ -1,10 +1,14 @@
 <?php
 use App\Http\Controllers\Admin\{AktivitasController, DashboardController, MitraController, PembayaranController, PengajuanController, PeriodeController, StokController, TransaksiController};
 use App\Http\Controllers\Auth\LoginController;
-use App\Http\Middleware\EnsureAdmin;
+use App\Http\Controllers\LandingController;
+use App\Http\Controllers\Mitra\PortalController;
+use App\Http\Middleware\{EnsureAdmin, EnsureMitra};
 use Illuminate\Support\Facades\Route;
 
-Route::redirect('/', '/admin');
+// --- publik ---
+Route::get('/', [LandingController::class, 'index'])->name('landing');
+Route::post('daftar', [LandingController::class, 'daftar'])->middleware('guest')->name('daftar');
 
 // --- autentikasi ---
 Route::middleware('guest')->group(function () {
@@ -39,4 +43,13 @@ Route::middleware(['auth', EnsureAdmin::class])->prefix('admin')->name('admin.')
 
     Route::get('pembayaran', [PembayaranController::class, 'index'])->name('pembayaran.index');
     Route::post('pembayaran', [PembayaranController::class, 'store'])->name('pembayaran.store');
+});
+
+// --- portal mitra ---
+Route::middleware(['auth', EnsureMitra::class])->prefix('mitra')->name('mitra.')->group(function () {
+    Route::get('/', [PortalController::class, 'dashboard'])->name('dashboard');
+    Route::get('pengajuan', [PortalController::class, 'pengajuan'])->name('pengajuan.index');
+    Route::post('pengajuan', [PortalController::class, 'storePengajuan'])->name('pengajuan.store');
+    Route::get('transaksi', [PortalController::class, 'transaksi'])->name('transaksi.index');
+    Route::get('pembayaran', [PortalController::class, 'pembayaran'])->name('pembayaran.index');
 });

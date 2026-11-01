@@ -34,18 +34,10 @@ class LoginController extends Controller
             throw ValidationException::withMessages(['username' => 'Username atau password salah.']);
         }
 
-        // panel ini khusus admin; akun mitra ditolak walau kredensialnya benar
-        if (! Auth::user()->isAdmin()) {
-            Auth::logout();
-            $request->session()->invalidate();
-            $request->session()->regenerateToken();
-            throw ValidationException::withMessages(['username' => 'Akun ini tidak memiliki akses ke panel admin.']);
-        }
-
         RateLimiter::clear($key);
         $request->session()->regenerate();
 
-        return redirect()->intended(route('admin.dashboard'));
+        return redirect()->intended($request->user()->homeUrl());
     }
 
     public function destroy(Request $request)

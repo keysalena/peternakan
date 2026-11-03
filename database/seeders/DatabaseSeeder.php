@@ -36,35 +36,35 @@ class DatabaseSeeder extends Seeder
         StokAyam::create(['id_periode' => $p12->id_periode, 'jumlah_tersedia' => 8420, 'tgl_update' => '2026-10-25 08:10:00']);
 
         foreach ([
-            ['2026-10-10', 'Pemeriksaan kesehatan', 120, 'Kandang B'],
-            ['2026-10-17', 'Pemeriksaan kesehatan', 71,  'Kandang A'],
-            ['2026-10-22', 'Penimbangan mingguan',  0,   'Rata-rata 1,6 kg'],
-            ['2026-10-23', 'Mortalitas naik',       14,  'Kandang B'],
-            ['2026-10-24', 'Pakan hampir habis',    0,   'Silo 2 tersisa 12%'],
-            ['2026-10-25', 'Vaksinasi ND-IB',       0,   'Kandang A'],
+            [now()->subDays(21)->toDateString(), 'Pemeriksaan kesehatan', 120, 'Kandang B'],
+            [now()->subDays(14)->toDateString(), 'Pemeriksaan kesehatan', 71,  'Kandang A'],
+            [now()->subDays(9)->toDateString(),  'Penimbangan mingguan',  0,   'Rata-rata 1,6 kg'],
+            [now()->subDays(2)->toDateString(),  'Mortalitas naik',       14,  'Kandang B'],
+            [now()->subDays(1)->toDateString(),  'Pemberian pakan',       0,   'Silo 2 tersisa 12%'],
+            [now()->toDateString(),              'Vaksinasi ND-IB',       0,   'Kandang A'],
         ] as [$tgl, $jenis, $mati, $cat]) {
             AktivitasPemeliharaan::create(['id_periode' => $p12->id_periode, 'tanggal' => $tgl, 'jenis_aktivitas' => $jenis, 'mortalitas' => $mati, 'catatan' => $cat]);
         }
 
         // --- Pengajuan -> transaksi (1:1) -> pembayaran (1:N) ---
         $hari = fn (int $n) => now()->subDays($n);
-        $buat = function (string $mitraNama, int $jumlah, string $status, int $umurHari, ?array $trx = null, array $bayar = []) use ($mitra, $p12, $hari) {
+        $buat = function (string $mitraNama, int $jumlah, string $status, int $umurHari, ?array $trx = null, array $bayar = [], bool $diambil = false) use ($mitra, $p12, $hari) {
             $pgj = PengajuanPengambilan::create([
                 'id_mitra' => $mitra[$mitraNama]->id_mitra, 'id_periode' => $p12->id_periode, 'jumlah_diminta' => $jumlah,
                 'tgl_pengambilan' => $hari($umurHari)->addDays(5)->toDateString(), 'status' => $status,
                 'created_at' => $hari($umurHari), 'updated_at' => $hari($umurHari),
             ]);
             if ($trx) {
-                $t = Transaksi::create(['id_pengajuan' => $pgj->id_pengajuan, 'jumlah_diambil' => $trx[0], 'total_harga' => $trx[0] * 7000, 'tgl_transaksi' => $hari($umurHari)->toDateString()]);
+                $t = Transaksi::create(['id_pengajuan' => $pgj->id_pengajuan, 'jumlah_diambil' => $trx[0], 'total_harga' => $trx[0] * 7000, 'tgl_transaksi' => $hari($umurHari)->toDateString(), 'diambil_pada' => $diambil ? $hari($umurHari)->addDay() : null]);
                 foreach ($bayar as [$nominal, $metode, $st]) {
                     Pembayaran::create(['id_transaksi' => $t->id_transaksi, 'jumlah_bayar' => $nominal, 'metode' => $metode, 'status' => $st, 'tgl_bayar' => $hari($umurHari)->toDateString()]);
                 }
             }
         };
-        $buat('PT Agro Nusantara', 900,  'disetujui', 6, [900],  [[6300000, 'Transfer bank', 'lunas']]);
-        $buat('PT Unggas Prima',   700,  'disetujui', 5, [700],  [[4900000, 'Transfer bank', 'lunas']]);
+        $buat('PT Agro Nusantara', 900,  'disetujui', 6, [900],  [[6300000, 'Transfer bank', 'lunas']], true);
+        $buat('PT Unggas Prima',   700,  'disetujui', 5, [700],  [[4900000, 'Transfer bank', 'lunas']], true);
         $buat('PT Berkah Sentosa', 1200, 'disetujui', 4, [1200], [[8400000, 'Transfer bank', 'lunas']]);
-        $buat('CV Tani Lestari',   1500, 'disetujui', 3, [1500], [[5000000, 'Transfer bank', 'cicilan']]);
+        $buat('CV Tani Lestari',   1500, 'disetujui', 9, [1500], [[5000000, 'Transfer bank', 'cicilan']]);
         $buat('PT Sumber Makmur',  2000, 'ditolak',   2);
         $buat('CV Maju Jaya',      800,  'menunggu',  1);
         $buat('CV Tani Lestari',   600,  'menunggu',  0);

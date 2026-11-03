@@ -9,13 +9,16 @@
   <x-stat icon="egg" label="Ayam keluar" :value="number_format($diambil,0,',','.')" unit="ekor"/>
   <x-stat icon="cash" label="Total tagihan" :value="'Rp '.number_format($tagihan/1000000,1,',','.')" unit="juta"/>
   <section class="card full">
-    <div class="scroll"><table style="min-width:760px">
-      <thead><tr><th>ID</th><th>Pengajuan</th><th>Mitra</th><th>Diambil</th><th>Total</th><th>Dibayar</th><th>Bayar</th></tr></thead>
+    <div class="scroll"><table style="min-width:920px">
+      <thead><tr><th>ID</th><th>Pengajuan</th><th>Mitra</th><th>Diambil</th><th>Total</th><th>Dibayar</th><th>Bayar</th><th>Ambil</th><th>Aksi</th></tr></thead>
       <tbody class="anim-rows">
         @foreach ($list as $t)
           <tr style="--n:{{ $loop->index }}"><td class="mono">{{ $t->kode }}</td><td class="mono">{{ $t->pengajuan->kode }}</td><td><span class="pn">{{ $t->pengajuan->mitra->nama_perusahaan }}</span><span class="sub">{{ $t->tgl_transaksi->translatedFormat('j M Y') }}</span></td>
             <td class="mono">{{ number_format($t->jumlah_diambil,0,',','.') }}</td><td class="mono">Rp {{ number_format($t->total_harga,0,',','.') }}</td>
-            <td class="mono">Rp {{ number_format($t->total_dibayar,0,',','.') }}</td><td><x-badge :s="$t->status_bayar"/></td></tr>
+            <td class="mono">Rp {{ number_format($t->total_dibayar,0,',','.') }}</td><td><x-badge :s="$t->status_bayar"/></td>
+            <td><x-badge :s="$t->status_ambil"/></td>
+            <td><div class="acts"><a class="btn ghost sm" href="{{ route('nota', $t) }}" target="_blank" rel="noopener">Nota</a>
+              @unless ($t->diambil_pada)<form method="POST" action="{{ route('admin.transaksi.konfirmasi', $t) }}" data-confirm="Konfirmasi {{ $t->kode }} sudah diambil?">@csrf @method('PATCH')<button class="btn sm">Konfirmasi</button></form>@endunless</div></td></tr>
         @endforeach
       </tbody>
     </table></div>

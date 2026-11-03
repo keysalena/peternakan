@@ -2,6 +2,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Support\Peringatan;
 use App\Models\{AktivitasPemeliharaan, Mitra, Pembayaran, PengajuanPengambilan, PeriodePemeliharaan, Transaksi};
 
 class DashboardController extends Controller
@@ -31,6 +32,7 @@ class DashboardController extends Controller
         ]);
 
         return view('admin.dashboard.index', [
+            'peringatan' => Peringatan::admin(),
             'periode' => $periode, 'stok' => $stok, 'awal' => $awal, 'mati' => $mati,
             'persenStok' => $awal ? round($stok / $awal * 100) : 0,
             'persenMati' => $awal ? round($mati / $awal * 100, 1) : 0,

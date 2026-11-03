@@ -42,7 +42,7 @@
 
   <section class="info" id="info">
     <div class="wrap cards">
-      <div class="c"><small>Periode berjalan</small><b>{{ $periode->nama_periode ?? 'Belum ada' }}</b><span>{{ $periode ? $periode->rentang : 'Periode berikutnya segera dibuka' }}</span></div>
+      <div class="c"><small>Periode berjalan</small><b>{{ $periode->nama_periode ?? 'Belum ada' }}</b><span>{{ $periode ? $periode->estimasi : 'Periode berikutnya segera dibuka' }}</span></div>
       <div class="c"><small>Stok ayam tersedia</small><b>{{ number_format($stok,0,',','.') }} ekor</b><span>Diperbarui otomatis setiap ada transaksi</span></div>
       <div class="c"><small>Mitra terverifikasi</small><b>{{ $mitraAktif }}</b><span>Perusahaan yang sudah bergabung</span></div>
     </div>

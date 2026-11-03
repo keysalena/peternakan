@@ -9,7 +9,7 @@ class Transaksi extends Model
     protected $primaryKey = 'id_transaksi';
     public $timestamps = false;
     protected $guarded = [];
-    protected $casts = ['tgl_transaksi' => 'date'];
+    protected $casts = ['tgl_transaksi' => 'date', 'diambil_pada' => 'datetime'];
 
     public function pengajuan() { return $this->belongsTo(PengajuanPengambilan::class, 'id_pengajuan'); }
     public function pembayaran() { return $this->hasMany(Pembayaran::class, 'id_transaksi'); }
@@ -21,6 +21,7 @@ class Transaksi extends Model
     {
         return (int) $this->pembayaran->where('status', '!=', 'gagal')->sum('jumlah_bayar');
     }
+    public function getStatusAmbilAttribute(): string { return $this->diambil_pada ? 'diambil' : 'belum diambil'; }
     public function getSisaAttribute(): int { return max($this->total_harga - $this->total_dibayar, 0); }
     public function getStatusBayarAttribute(): string
     {

@@ -5,6 +5,8 @@
   <button class="btn" data-open="periode-baru"><svg class="ic"><use href="#i-plus"/></svg>Periode baru</button>
 </x-page-title>
 
+<x-peringatan :items="$peringatan"/>
+
 <div class="grid">
   <x-stat icon="box" label="Stok ayam" :value="number_format($stok,0,',','.')" unit="ekor" tone="ok" :badge="$persenStok >= 50 ? 'stabil' : 'menipis'" :bar="$persenStok"/>
   <x-stat icon="clip" label="Pengajuan menunggu" :value="$menunggu" unit="pengajuan" tone="w" badge="perlu cek" :bar="$persenMenunggu"/>
@@ -33,6 +35,7 @@
     <div class="gauge" style="--p:{{ $persenStok }}"><div><span><span class="num">{{ $persenStok }}%</span><small>AYAM TERSISA</small></span></div></div>
     <div class="li"><i><svg class="ic"><use href="#i-egg"/></svg></i><div><b>{{ number_format($awal,0,',','.') }} ekor</b><span>Jumlah awal</span></div></div>
     <div class="li"><i><svg class="ic"><use href="#i-down"/></svg></i><div><b>{{ str_replace('.', ',', $persenMati) }}%</b><span>Mortalitas</span></div></div>
+    <div class="li"><i><svg class="ic"><use href="#i-cal"/></svg></i><div><b>{{ $periode ? $periode->estimasi : '-' }}</b><span>Estimasi pengambilan</span></div></div>
     <div class="li"><i><svg class="ic"><use href="#i-ref"/></svg></i><div><b>{{ $periode?->stok?->tgl_update?->translatedFormat('j M, H:i') ?? '-' }}</b><span>Stok diperbarui</span></div></div>
     <a class="btn" href="{{ route('admin.stok.index') }}">Lihat detail</a>
   </section>

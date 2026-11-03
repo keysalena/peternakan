@@ -12,6 +12,8 @@
   </section>
 @endif
 
+<x-peringatan :items="$peringatan"/>
+
 <div class="grid">
   <x-stat icon="box" label="Stok tersedia" :value="number_format($stok,0,',','.')" unit="ekor" tone="ok" badge="saat ini" :bar="$persenStok"/>
   <x-stat icon="clip" label="Pengajuan menunggu" :value="$menunggu" unit="pengajuan" tone="w" badge="diproses"/>
@@ -38,6 +40,7 @@
     <div class="head"><h2 style="color:#fff">{{ $periode->nama_periode ?? 'Tidak ada periode' }}</h2></div>
     <div class="gauge" style="--p:{{ $persenStok }}"><div><span><span class="num">{{ $persenStok }}%</span><small>AYAM TERSISA</small></span></div></div>
     <div class="li"><i><svg class="ic"><use href="#i-cal"/></svg></i><div><b>{{ $periode?->rentang ?? '-' }}</b><span>Rentang periode</span></div></div>
+    <div class="li"><i><svg class="ic"><use href="#i-ref"/></svg></i><div><b>{{ $periode ? $periode->estimasi : '-' }}</b><span>Estimasi pengambilan</span></div></div>
   </section>
 </div>
 @endsection

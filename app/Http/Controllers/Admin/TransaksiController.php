@@ -44,4 +44,18 @@ class TransaksiController extends Controller
         });
         return redirect()->route('admin.transaksi.index')->with('ok', 'Transaksi diproses, stok berkurang otomatis');
     }
+
+    /** Tujuan QR nota: tampilkan detail dan tombol konfirmasi pengambilan. */
+    public function scan(Transaksi $transaksi)
+    {
+        return view('admin.transaksi.scan', ['t' => $transaksi->load('pengajuan.mitra', 'pengajuan.periode', 'pembayaran')]);
+    }
+
+    public function konfirmasi(Transaksi $transaksi)
+    {
+        if (! $transaksi->diambil_pada) {
+            $transaksi->update(['diambil_pada' => now()]);
+        }
+        return redirect()->route('admin.transaksi.index')->with('ok', $transaksi->kode . ' dikonfirmasi sudah diambil');
+    }
 }

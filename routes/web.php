@@ -2,6 +2,7 @@
 use App\Http\Controllers\Admin\{AktivitasController, DashboardController, MitraController, PembayaranController, PengajuanController, PeriodeController, StokController, TransaksiController};
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\LandingController;
+use App\Http\Controllers\NotaController;
 use App\Http\Controllers\Mitra\PortalController;
 use App\Http\Middleware\{EnsureAdmin, EnsureMitra};
 use Illuminate\Support\Facades\Route;
@@ -15,6 +16,7 @@ Route::middleware('guest')->group(function () {
     Route::get('login', [LoginController::class, 'show'])->name('login');
     Route::post('login', [LoginController::class, 'store']);
 });
+Route::get('nota/{transaksi}', [NotaController::class, 'show'])->middleware('auth')->name('nota');
 Route::post('logout', [LoginController::class, 'destroy'])->middleware('auth')->name('logout');
 
 Route::middleware(['auth', EnsureAdmin::class])->prefix('admin')->name('admin.')->group(function () {
@@ -40,6 +42,8 @@ Route::middleware(['auth', EnsureAdmin::class])->prefix('admin')->name('admin.')
     Route::post('pengajuan/{pengajuan}/proses', [TransaksiController::class, 'store'])->name('pengajuan.proses');
 
     Route::get('transaksi', [TransaksiController::class, 'index'])->name('transaksi.index');
+    Route::get('transaksi/{transaksi}/scan', [TransaksiController::class, 'scan'])->middleware('signed')->name('transaksi.scan');
+    Route::patch('transaksi/{transaksi}/konfirmasi', [TransaksiController::class, 'konfirmasi'])->name('transaksi.konfirmasi');
 
     Route::get('pembayaran', [PembayaranController::class, 'index'])->name('pembayaran.index');
     Route::post('pembayaran', [PembayaranController::class, 'store'])->name('pembayaran.store');

@@ -1,7 +1,7 @@
 @props(['s'])
 @php
   $tone = match ($s) {
-    'terverifikasi', 'disetujui', 'lunas', 'berjalan', 'selesai' => 'ok',
+    'terverifikasi', 'disetujui', 'lunas', 'berjalan', 'selesai', 'diambil' => 'ok',
     'ditolak', 'gagal' => 'c',
     default => 'w',   // menunggu, cicilan, belum bayar, direncanakan
   };

@@ -2,6 +2,7 @@
 namespace App\Http\Controllers\Mitra;
 
 use App\Http\Controllers\Controller;
+use App\Support\Peringatan;
 use App\Models\{Pembayaran, PengajuanPengambilan, PeriodePemeliharaan, Transaksi};
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
@@ -27,6 +28,7 @@ class PortalController extends Controller
         $trx = $this->transaksiSaya()->get();
 
         return view('mitra.dashboard', [
+            'peringatan' => Peringatan::mitra($mitra),
             'mitra' => $mitra, 'periode' => $periode, 'stok' => $stok,
             'persenStok' => $awal ? round($stok / $awal * 100) : 0,
             'menunggu' => $mitra->pengajuan()->where('status', 'menunggu')->count(),
